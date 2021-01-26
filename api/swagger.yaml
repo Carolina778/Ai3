@@ -2,15 +2,10 @@
 swagger: "2.0"
 info:
   description: "Registo e acompanhamento de encomendas de produtos numa empresa"
-  version: "1.0.0"
+  version: "2.0.0"
   title: "Gestor de Encomendas Api"
-  termsOfService: "http://localhost:4000/gestorencomendas-api/"
-  contact:
-    name: "SuporteAI3"
-    url: "http://localhost:4000/gestorencomendas-api/v1/termo-uso"
-    email: "estgv*****@alunos.estgv.ipv.pt"
 host: "localhost:4000"
-basePath: "/gestorencomendas-api/v1"
+basePath: "/gestorencomendas-api/"
 schemes:
 - "http"
 - "https"
@@ -41,8 +36,6 @@ paths:
           description: "Erro em uso!"
         "400":
           description: "Requisição inválida!"
-        "500":
-          description: "Erro interno no servidor!"
       x-swagger-router-controller: "Utilizador"
   /utilizador/{username}:
     get:
@@ -63,7 +56,7 @@ paths:
         type: "string"
       responses:
         "201":
-          description: "Bucado com sucesso!"
+          description: "Buscado com sucesso!"
           schema:
             $ref: "#/definitions/utilizador_"
         "400":
@@ -94,7 +87,7 @@ paths:
         description: "Objeto utilizador atualizado"
         required: true
         schema:
-          $ref: "#/definitions/utilizador__1"
+          $ref: "#/definitions/utilizador_"
       responses:
         "200":
           description: "Atualizado com sucesso!"
@@ -102,37 +95,6 @@ paths:
           description: "Requisição inválida!"
         "404":
           description: "Utilizador não encontrado"
-        "500":
-          description: "Erro interno no servidor!"
-      x-swagger-router-controller: "Utilizador"
-  /utilizador/apagar{username}:
-    delete:
-      tags:
-      - "Utilizador"
-      summary: "Apagar utilizador"
-      description: "Apagar um utilizador"
-      operationId: "ApagarUtilizador"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "username"
-        in: "path"
-        description: "O nome do utilizador a ser eliminado"
-        required: true
-        type: "string"
-      responses:
-        "201":
-          description: "Utilizador apagado com sucesso!"
-        "204":
-          description: "Erro sem conteúdo!"
-        "226":
-          description: "Erro em uso!"
-        "400":
-          description: "Nome inválido!"
-        "404":
-          description: "Utilizador não encontrado!"
         "500":
           description: "Erro interno no servidor!"
       x-swagger-router-controller: "Utilizador"
@@ -175,7 +137,6 @@ paths:
         "400":
           description: "Username e/ou password inválido"
       x-swagger-router-controller: "Utilizador"
-    x-swagger-router-controller: "utilizador"
   /utilizador/logout:
     get:
       tags:
@@ -192,14 +153,65 @@ paths:
         default:
           description: "Logout realizado com sucesso"
       x-swagger-router-controller: "Utilizador"
-    x-swagger-router-controller: "utilizador"
+  /utilizador/apagar{username}:
+    delete:
+      tags:
+      - "Utilizador"
+      summary: "Apagar utilizador"
+      description: "Apagar um utilizador"
+      operationId: "ApagarUtilizador"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "O nome do utilizador a ser eliminado"
+        required: true
+        type: "string"
+      responses:
+        "201":
+          description: "Utilizador apagado com sucesso!"
+        "204":
+          description: "Erro sem conteúdo!"
+        "226":
+          description: "Erro em uso!"
+        "400":
+          description: "Nome inválido!"
+        "404":
+          description: "Utilizador não encontrado!"
+        "500":
+          description: "Erro interno no servidor!"
+      x-swagger-router-controller: "Utilizador"
   /produto:
+    get:
+      tags:
+      - "Produto"
+      summary: "Mostrar todos os produtos"
+      description: "Mostrar todos os produtos"
+      operationId: "mostrarProduto"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "Produtos mostrados!"
+          schema:
+            type: "array"
+            items:
+              type: "string"
+        "404":
+          description: "Os produtos não foram encontrados!"
+      x-swagger-router-controller: "Produto"
     post:
       tags:
       - "Produto"
       summary: "Adicionar produto"
       description: "Adicionar um novo produto"
-      operationId: "AdicinonarProduto"
+      operationId: "adicionarProduto"
       consumes:
       - "application/json"
       produces:
@@ -210,7 +222,7 @@ paths:
         description: "Produto a ser adicionado à loja"
         required: true
         schema:
-          $ref: "#/definitions/produto__1"
+          $ref: "#/definitions/produto_"
       responses:
         "201":
           description: "Produto adicionado com sucesso!"
@@ -248,71 +260,13 @@ paths:
         "404":
           description: "Produto não encontrado"
       x-swagger-router-controller: "Produto"
-  /produto/encontrarPorDisp:
-    get:
-      tags:
-      - "Produto"
-      summary: "Encontra produto pela disponibilidade"
-      description: "Encontra produto pela disponibilidade"
-      operationId: "EncontrarProdutoDisp"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "disp"
-        in: "query"
-        description: "Disponibilidade do produto a ser encontrado"
-        required: true
-        type: "array"
-        items:
-          type: "string"
-          default: "Disponível"
-          enum:
-          - "Disponível"
-          - "Esgotado"
-        collectionFormat: "multi"
-      responses:
-        "200":
-          description: "Produto encontrado com sucesso!"
-          schema:
-            $ref: "#/definitions/inline_response_200"
-        "400":
-          description: "Produto inválido!"
-      x-swagger-router-controller: "Produto"
   /produto/{id_produto}:
-    get:
-      tags:
-      - "Produto"
-      summary: "Encontra produto pelo ID"
-      description: "Encontra produto pelo ID"
-      operationId: "EncontrarProdutoId"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "id_produto"
-        in: "path"
-        description: "ID do produto a ser encontrado"
-        required: true
-        type: "integer"
-      responses:
-        "200":
-          description: "Produto encontrado com sucesso!"
-          schema:
-            $ref: "#/definitions/produto__1"
-        "400":
-          description: "ID do produto inválido!"
-        "404":
-          description: "Produto não encontrado!"
-      x-swagger-router-controller: "Produto"
     delete:
       tags:
       - "Produto"
       summary: "Apaga produto pelo ID"
       description: "Apaga produto pelo ID"
-      operationId: "ApagarProdutoId"
+      operationId: "apagarProdutoId"
       consumes:
       - "application/json"
       produces:
@@ -322,7 +276,7 @@ paths:
         in: "path"
         description: "ID do produto a ser apagado"
         required: true
-        type: "integer"
+        type: "string"
       responses:
         "200":
           description: "Produto apagado com sucesso!"
@@ -348,7 +302,7 @@ paths:
         description: "Objeto encomenda"
         required: true
         schema:
-          $ref: "#/definitions/encomenda__1"
+          $ref: "#/definitions/encomenda_"
       responses:
         "200":
           description: "Encomenda realizada com sucesso!"
@@ -401,107 +355,22 @@ paths:
         "200":
           description: "Encomenda encontrada com sucesso!"
           schema:
-            $ref: "#/definitions/encomenda__1"
+            $ref: "#/definitions/encomenda_"
         "400":
           description: "ID da encomenda invalido!"
         "404":
           description: "Encomenda não encontrada!"
       x-swagger-router-controller: "Encomenda"
 definitions:
-  produto__1:
-    type: "object"
-    properties:
-      id_produto:
-        type: "integer"
-        example: 1
-      nome:
-        type: "string"
-        example: "Leite"
-      tipo:
-        type: "string"
-        example: "alimento"
-      preço:
-        type: "number"
-        format: "double"
-      descrição:
-        type: "string"
-      disp:
-        type: "string"
-        enum:
-        - "Disponível"
-        - "Esgotado"
-      stock:
-        type: "integer"
-        format: "int32"
-    example:
-      tipo: "alimento"
-      descrição: "descrição"
-      preço: 0.80082819046101150206595775671303272247314453125
-      nome: "Leite"
-      stock: 6
-      id_produto: 1
-      disp: "Disponível"
-  encomenda__1:
-    type: "object"
-    properties:
-      id_encomenda:
-        type: "integer"
-        example: 1
-      estado:
-        type: "string"
-        enum:
-        - "Criada"
-        - "Enviada"
-        - "Cancelada"
-        - "Entregue"
-      data_cria:
-        type: "string"
-        format: "date"
-      password:
-        type: "string"
-      username:
-        type: "string"
-      datanasc:
-        type: "string"
-        format: "date"
-    example:
-      estado: "Criada"
-      password: "password"
-      data_cria: "2000-01-23"
-      datanasc: "2000-01-23"
-      id_encomenda: 1
-      username: "username"
-  utilizador__1:
-    type: "object"
-    properties:
-      id_funcionario:
-        type: "integer"
-        example: 1
-      funcionario:
-        type: "string"
-        example: "Janete Silva"
-      email:
-        type: "string"
-        example: "janete@silva.com"
-      password:
-        type: "string"
-      username:
-        type: "string"
-      datanasc:
-        type: "string"
-        format: "date"
   utilizador_:
     type: "object"
     properties:
       id_funcionario:
         type: "integer"
-        example: 1
       funcionario:
         type: "string"
-        example: "Janete Silva"
       email:
         type: "string"
-        example: "janete@silva.com"
       password:
         type: "string"
       username:
@@ -512,56 +381,19 @@ definitions:
     example:
       password: "password"
       datanasc: "2000-01-23"
-      id_funcionario: 1
-      funcionario: "Janete Silva"
-      email: "janete@silva.com"
+      id_funcionario: 0
+      funcionario: "funcionario"
+      email: "email"
       username: "username"
-  inline_response_200:
-    type: "object"
-    properties:
-      id_produto:
-        type: "integer"
-        example: 1
-      nome:
-        type: "string"
-        example: "Leite"
-      tipo:
-        type: "string"
-        example: "alimento"
-      preço:
-        type: "number"
-        format: "double"
-      descrição:
-        type: "string"
-      disp:
-        type: "string"
-        enum:
-        - "Disponível"
-        - "Esgotado"
-      stock:
-        type: "integer"
-        format: "int32"
-        example: 4
-    example:
-      tipo: "alimento"
-      descrição: "descrição"
-      preço: 0.80082819046101150206595775671303272247314453125
-      nome: "Leite"
-      stock: 4
-      id_produto: 1
-      disp: "Disponível"
   produto_:
     type: "object"
     properties:
       id_produto:
-        type: "integer"
-        example: 1
+        type: "string"
       nome:
         type: "string"
-        example: "Leite"
       tipo:
         type: "string"
-        example: "alimento"
       preço:
         type: "number"
         format: "double"
@@ -580,7 +412,6 @@ definitions:
     properties:
       id_encomenda:
         type: "integer"
-        example: 1
       estado:
         type: "string"
         enum:
@@ -591,10 +422,17 @@ definitions:
       data_cria:
         type: "string"
         format: "date"
-      password:
+    example:
+      estado: "Criada"
+      data_cria: "2000-01-23"
+      id_encomenda: 0
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      type:
         type: "string"
-      username:
+      message:
         type: "string"
-      datanasc:
-        type: "string"
-        format: "date"

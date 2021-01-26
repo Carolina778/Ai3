@@ -20,7 +20,7 @@ exports.apagarUtilizador = function(username) {
  * Atualizar um utilizador
  *
  * username String Username do utilizador a ser atualizado
- * utilizador_ Utilizador__1 Objeto utilizador atualizado
+ * utilizador_ Utilizador_ Objeto utilizador atualizado
  * no response value expected for this operation
  **/
 exports.atualizarUtilizador = function(username,utilizador_) {
@@ -43,9 +43,9 @@ exports.buscarUtilizadorPeloNome = function(username) {
     examples['application/json'] = {
   "password" : "password",
   "datanasc" : "2000-01-23",
-  "id_funcionario" : 1,
-  "funcionario" : "Janete Silva",
-  "email" : "janete@silva.com",
+  "id_funcionario" : 0,
+  "funcionario" : "funcionario",
+  "email" : "email",
   "username" : "username"
 };
     if (Object.keys(examples).length > 0) {

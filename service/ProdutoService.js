@@ -1,16 +1,48 @@
 'use strict';
 
-
+const Produto = require('../models/produto')
 /**
  * Adicionar produto
  * Adicionar um novo produto
  *
- * produto_ Produto__1 Produto a ser adicionado à loja
+ * produto_ Produto_ Produto a ser adicionado à loja
  * no response value expected for this operation
  **/
-exports.adicinonarProduto = function(produto_) {
+exports.adicionarProduto = function(produto_) {
   return new Promise(function(resolve, reject) {
-    resolve();
+    const produtoExistente = Produto.find({
+      nome : produto_.nome,
+    })
+    produtoExistente
+      .exec()
+      .then(res => {
+        if (res.length < 1) {
+          var produtoNovo = new Produto({
+            nome: produto_.nome,
+            tipo: produto_.tipo,
+            preço: produto_.preço,
+            descrição: produto_.descrição,
+            disp: produto_.disp,
+            stock: produto_.stock
+          })
+          produtoNovo
+            .save()
+            .then(res => {
+              console.log(res)
+              resolve(200);
+            })
+            .catch(err => {
+              reject(400);
+              
+            });
+        }
+        else {
+          reject(406);
+        }
+      })
+      .catch(err => {
+        reject(400);
+      });
   });
 }
 
@@ -24,8 +56,15 @@ exports.adicinonarProduto = function(produto_) {
  **/
 exports.apagarProdutoId = function(id_produto) {
   return new Promise(function(resolve, reject) {
-    resolve();
-  });
+      Produto.remove({ _id: id_produto })
+        .exec()
+        .then(res => {
+          resolve(200);
+        })
+        .catch(err => {
+          reject(404);
+        })
+    });
 }
 
 
@@ -44,57 +83,24 @@ exports.atualizarProduto = function(produto_) {
 
 
 /**
- * Encontra produto pela disponibilidade
- * Encontra produto pela disponibilidade
+ * Mostrar todos os produtos
+ * Mostrar todos os produtos
  *
- * disp List Disponibilidade do produto a ser encontrado
- * returns inline_response_200
+ * returns List
  **/
-exports.encontrarProdutoDisp = function(disp) {
+exports.mostrarProduto = function() {
   return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "tipo" : "alimento",
-  "descrição" : "descrição",
-  "preço" : 0.8008281904610115,
-  "nome" : "Leite",
-  "stock" : 4,
-  "id_produto" : 1,
-  "disp" : "Disponível"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
-}
-
-
-/**
- * Encontra produto pelo ID
- * Encontra produto pelo ID
- *
- * id_produto Integer ID do produto a ser encontrado
- * returns produto__1
- **/
-exports.encontrarProdutoId = function(id_produto) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "tipo" : "alimento",
-  "descrição" : "descrição",
-  "preço" : 0.8008281904610115,
-  "nome" : "Leite",
-  "stock" : 6,
-  "id_produto" : 1,
-  "disp" : "Disponível"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
+      Produto.find()
+      .exec()
+      .then(result => {
+        if (result.length > 0)
+          resolve(result)
+        else
+          reject(404)
+      })
+      .catch(err => {
+        reject(400)
+      })
   });
 }
 

@@ -1,8 +1,81 @@
 'use strict';
 
-var fs = require('fs'),
-    path = require('path'),
-    http = require('http');
+  require('dotenv').config()
+
+  var fs = require('fs'),
+      path = require('path'),
+      http = require('http');
+  
+  //cors---------------------------------------
+  var cors = require('cors')
+  
+  const corsOpts = {
+     
+    origin: '*',
+    
+    methods: [
+      'GET',
+      'POST',
+      'PUT',
+      'DELETE'
+    ],
+  
+    allowedHeaders: [
+      'X-Requested-With',
+      'Content-Type',
+      'Authorization',
+      
+    ]
+  
+  };
+
+//moongoose connection-------------------------
+
+const Session = require('express-session'),
+  mongoose = require('mongoose'),
+  MongoStore = require('connect-mongo')(Session);
+
+mongoose.connect(
+  process.env.DB_CONNECTION,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  },
+  () => {
+    console.log('Conectado à base de dados')
+  });
+
+var connection = new MongoStore({
+  autoRemove: 'native',
+  secret: process.env.sessionSecret,
+  mongooseConnection: mongoose.createConnection(
+    process.env.DB_CONNECTION,
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex: true,
+    }),
+  collection: 'sessions'
+});
+
+var sess = {
+  genid: function (req) {
+    return req.headers.authorization // use UUIDs for session IDs
+  },
+
+  secret: process.env.sessionSecret,
+  name: 'userSession',
+  resave: false,
+  saveUninitialized: false,
+  rolling: false,
+  store: connection,
+  unset: 'destroy',
+  cookie: {
+    secure: true,
+    maxAge: 60 * 60 * 100
+  }
+}
 
 var app = require('connect')();
 var swaggerTools = require('swagger-tools');
@@ -17,7 +90,7 @@ var options = {
 };
 
 // The Swagger document (require it, build it programmatically, fetch it from a URL, ...)
-var spec = fs.readFileSync(path.join(__dirname,'api/swagger.yaml'), 'utf8');
+var spec = fs.readFileSync(path.join(__dirname, 'api/swagger.yaml'), 'utf8');
 var swaggerDoc = jsyaml.safeLoad(spec);
 
 // Initialize the Swagger middleware

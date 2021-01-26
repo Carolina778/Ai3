@@ -20,18 +20,15 @@ exports.atualizarEncomenda = function(encomenda_) {
  * Encontrar encomenda pelo ID
  *
  * id_encomenda Integer ID da encomenda a encontrar
- * returns encomenda__1
+ * returns encomenda_
  **/
 exports.encontrarEncomenda = function(id_encomenda) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
   "estado" : "Criada",
-  "password" : "password",
   "data_cria" : "2000-01-23",
-  "datanasc" : "2000-01-23",
-  "id_encomenda" : 1,
-  "username" : "username"
+  "id_encomenda" : 0
 };
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
@@ -46,7 +43,7 @@ exports.encontrarEncomenda = function(id_encomenda) {
  * Registar encomenda
  * Registar uma nova encomenda
  *
- * encomenda_ Encomenda__1 Objeto encomenda
+ * encomenda_ Encomenda_ Objeto encomenda
  * no response value expected for this operation
  **/
 exports.registarEncomenda = function(encomenda_) {
