@@ -80,8 +80,9 @@ class AdicionarUtilizador extends React.Component {
                                                             onChange={(value) =>
                                                                 this.setState({ cargo: value.target.value })
                                                             }>
-                                                            <option>funcionário</option>
-                                                            <option>administrador</option>
+                                                            <option value="">Selecione...</option>
+                                                            <option value="funcionário">funcionário</option>
+                                                            <option value="administrador">administrador</option>
                                                         </select>
 
                                                     </div>
@@ -103,7 +104,20 @@ class AdicionarUtilizador extends React.Component {
 
 
     AddUtilizador() {
-        var this_ = this;
+        if (this.state.funcionario === "") {
+            alert("Insira o nome!");
+          } else if (this.state.email === "") {
+            alert("Insira o email!");
+          } else if (this.state.username === "") {
+            alert("Insira o username!");
+          } else if (this.state.password === "") {
+            alert("Insira a password!");
+          } else if (this.state.datanasc === "") {
+            alert("Insira a data de nascimento!");
+          } else if (this.state.cargo === "") {
+            alert("Insira o cargo!");
+          } 
+          else {
         axios({
             method: 'post',
             url: '/gestorencomendas-api/utilizador',
@@ -136,6 +150,7 @@ class AdicionarUtilizador extends React.Component {
             .then(function () {
                 console.log("then");
             })
+        }
     }
 }
 
