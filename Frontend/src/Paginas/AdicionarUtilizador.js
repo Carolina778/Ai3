@@ -1,6 +1,8 @@
 import React from "react";
 import { Form } from "react-bootstrap";
 import Menu from './Menu';
+import moment from 'moment';
+import Swal from 'sweetalert2';
 
 const axios = require('axios');
 
@@ -12,7 +14,7 @@ class AdicionarUtilizador extends React.Component {
             email: '',
             username: '',
             password: '',
-            datanasc: '',
+            datanasc: moment().format("yyyy-MM-dd"),
             cargo: '',
         };
         this.AddUtilizador = this.AddUtilizador.bind(this);
@@ -67,7 +69,7 @@ class AdicionarUtilizador extends React.Component {
                                                 <div className="form-group row">
                                                     <div className="col-sm-6">
                                                         <label htmlFor="inputDataNasc">Data de Nascimento</label>
-                                                        <input type="date" className="form-control" id="inputDataNasc" placeholder="01/01/2000" value={this.state.datanasc}
+                                                        <input type="date" className="form-control" id="inputDataNasc" placeholder="2000/12/01" value={this.state.datanasc}
                                                             onChange={(value) =>
                                                                 this.setState({ datanasc: value.target.value })
                                                             } />
@@ -115,15 +117,25 @@ class AdicionarUtilizador extends React.Component {
             }
         })
             .then(function (response) {
-                console.log('Utilizador adicionado')
+                console.log('Utilizador adicionado');
+                Swal.fire(
+                    'Adicionado!',
+                    'Utilizador adicionado com sucesso!',
+                    'success'
+                  );
             })
             .catch(function (error) {
                 console.log("err", error);
+                Swal.fire(
+                    'Erro!',
+                    'Utilizador não foi adicionado!',
+                    'error'
+                  );
 
             })
             .then(function () {
                 console.log("then");
-            });
+            })
     }
 }
 
