@@ -19,7 +19,7 @@ const ProdutoSchema = new mongoose.Schema({
         type: String,
         enum:[
             "Disponível",
-            "Esgotada"
+            "Esgotado"
         ]
     },
     stock:{

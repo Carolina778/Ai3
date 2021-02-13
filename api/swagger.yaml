@@ -11,12 +11,33 @@ schemes:
 - "https"
 paths:
   /utilizador:
+    get:
+      tags:
+      - "Utilizador"
+      summary: "Mostrar todos os utilizadores"
+      description: "Mostrar todos os utilizadores"
+      operationId: "mostrarUtilizador"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "Utilizadores mostrados!"
+          schema:
+            type: "array"
+            items:
+              type: "string"
+        "404":
+          description: "Os utilizadores não foram encontrados!"
+      x-swagger-router-controller: "Utilizador"
     post:
       tags:
       - "Utilizador"
       summary: "Registar utilizador"
       description: "Registar um novo utilizador"
-      operationId: "RegistarUtilizador"
+      operationId: "registarUtilizador"
       consumes:
       - "application/json"
       produces:
@@ -43,7 +64,7 @@ paths:
       - "Utilizador"
       summary: "Buscar utilizador"
       description: "Buscar um utilizador"
-      operationId: "BuscarUtilizadorPeloNome"
+      operationId: "buscarUtilizadorPeloNome"
       consumes:
       - "application/json"
       produces:
@@ -51,7 +72,7 @@ paths:
       parameters:
       - name: "username"
         in: "path"
-        description: "Username do utilizador a buscado"
+        description: "Username do utilizador a buscar"
         required: true
         type: "string"
       responses:
@@ -71,7 +92,7 @@ paths:
       - "Utilizador"
       summary: "Atualizar utilizador"
       description: "Atualizar um utilizador"
-      operationId: "AtualizarUtilizador"
+      operationId: "atualizarUtilizador"
       consumes:
       - "application/json"
       produces:
@@ -99,39 +120,26 @@ paths:
           description: "Erro interno no servidor!"
       x-swagger-router-controller: "Utilizador"
   /utilizador/login:
-    get:
+    post:
       tags:
       - "Utilizador"
       summary: "Faz o login na API"
       description: "Faz o login na API"
-      operationId: "LoginUtilizador"
+      operationId: "loginUtilizador"
       consumes:
       - "application/json"
       produces:
       - "application/json"
       parameters:
-      - name: "username"
-        in: "query"
+      - in: "body"
+        name: "login_"
         description: "Username do utilizador para o login"
         required: true
-        type: "string"
-      - name: "password"
-        in: "query"
-        description: "Password correspondente ao username"
-        required: true
-        type: "string"
+        schema:
+          $ref: "#/definitions/login_"
       responses:
         "200":
           description: "Login efetuado com sucesso!"
-          headers:
-            X-Rate-Limit:
-              type: "integer"
-              format: "int32"
-              description: "calls per hour allowed by the user"
-            X-Expires-After:
-              type: "string"
-              format: "date-time"
-              description: "date in UTC when token expires"
           schema:
             type: "string"
         "400":
@@ -143,7 +151,7 @@ paths:
       - "Utilizador"
       summary: "Faz o logout da API"
       description: "Faz o logout da API"
-      operationId: "LogoutUtilizador"
+      operationId: "logoutUtilizador"
       consumes:
       - "application/json"
       produces:
@@ -153,13 +161,13 @@ paths:
         default:
           description: "Logout realizado com sucesso"
       x-swagger-router-controller: "Utilizador"
-  /utilizador/apagar{username}:
+  /utilizador/apagar/{username}:
     delete:
       tags:
       - "Utilizador"
       summary: "Apagar utilizador"
       description: "Apagar um utilizador"
-      operationId: "ApagarUtilizador"
+      operationId: "apagarUtilizador"
       consumes:
       - "application/json"
       produces:
@@ -235,17 +243,21 @@ paths:
         "500":
           description: "Erro interno no servidor!"
       x-swagger-router-controller: "Produto"
+  /produto/{id_produto}:
     put:
       tags:
       - "Produto"
       summary: "Atualizar um produto"
       description: "Atualizar um produto"
-      operationId: "AtualizarProduto"
-      consumes:
-      - "application/json"
+      operationId: "atualizarProduto"
       produces:
       - "application/json"
       parameters:
+      - name: "id_produto"
+        in: "path"
+        description: "ID do produto a ser atualizado"
+        required: true
+        type: "string"
       - in: "body"
         name: "produto_"
         description: "Objeto produto a ser atualizado"
@@ -253,14 +265,13 @@ paths:
         schema:
           $ref: "#/definitions/produto_"
       responses:
-        "201":
+        "200":
           description: "Atualizado com sucesso!"
         "400":
           description: "Requisição inválida!"
         "404":
           description: "Produto não encontrado"
       x-swagger-router-controller: "Produto"
-  /produto/{id_produto}:
     delete:
       tags:
       - "Produto"
@@ -286,12 +297,33 @@ paths:
           description: "Produto não encontrado!"
       x-swagger-router-controller: "Produto"
   /encomenda:
+    get:
+      tags:
+      - "Encomenda"
+      summary: "Mostrar todas as encomendas"
+      description: "Mostrar todas as encomendas"
+      operationId: "mostrarEncomenda"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "Encomendas mostrados!"
+          schema:
+            type: "array"
+            items:
+              type: "string"
+        "404":
+          description: "As encomendas não foram encontradas!"
+      x-swagger-router-controller: "Encomenda"
     post:
       tags:
       - "Encomenda"
       summary: "Registar encomenda"
       description: "Registar uma nova encomenda"
-      operationId: "RegistarEncomenda"
+      operationId: "registarEncomenda"
       consumes:
       - "application/json"
       produces:
@@ -309,38 +341,13 @@ paths:
         "400":
           description: "Encomenda inválida!"
       x-swagger-router-controller: "Encomenda"
-    put:
-      tags:
-      - "Encomenda"
-      summary: "Atualizar uma encomenda"
-      description: "Atualizar uma encomenda"
-      operationId: "AtualizarEncomenda"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "encomenda_"
-        description: "Objeto encomenda a ser atualizada"
-        required: true
-        schema:
-          $ref: "#/definitions/encomenda_"
-      responses:
-        "201":
-          description: "Atualizado com sucesso!"
-        "400":
-          description: "Requisição inválida!"
-        "404":
-          description: "Encomenda não encontrada!"
-      x-swagger-router-controller: "Encomenda"
   /encomenda/{id_encomenda}:
     get:
       tags:
       - "Encomenda"
       summary: "Encontrar encomenda pelo ID"
       description: "Encontrar encomenda pelo ID"
-      operationId: "EncontrarEncomenda"
+      operationId: "encontrarEncomenda"
       consumes:
       - "application/json"
       produces:
@@ -361,12 +368,49 @@ paths:
         "404":
           description: "Encomenda não encontrada!"
       x-swagger-router-controller: "Encomenda"
+    patch:
+      tags:
+      - "Encomenda"
+      summary: "Atualizar uma encomenda pelo id"
+      description: "Atualizar uma encomenda"
+      operationId: "atualizarEncomenda"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id_encomenda"
+        in: "path"
+        description: "Objeto encomenda a ser atualizada"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "atualizarEncomenda_"
+        description: "Information to update the order"
+        required: false
+        schema:
+          $ref: "#/definitions/atualizarEncomenda_"
+      responses:
+        "201":
+          description: "Atualizado com sucesso!"
+        "400":
+          description: "Requisição inválida!"
+        "404":
+          description: "Encomenda não encontrada!"
+      x-swagger-router-controller: "Encomenda"
 definitions:
+  login_:
+    type: "string"
+    properties:
+      username:
+        type: "string"
+      password:
+        type: "string"
   utilizador_:
     type: "object"
     properties:
       id_funcionario:
-        type: "integer"
+        type: "string"
       funcionario:
         type: "string"
       email:
@@ -378,11 +422,17 @@ definitions:
       datanasc:
         type: "string"
         format: "date"
+      cargo:
+        type: "string"
+        enum:
+        - "funcionário"
+        - "administrador"
     example:
       password: "password"
       datanasc: "2000-01-23"
-      id_funcionario: 0
+      id_funcionario: "id_funcionario"
       funcionario: "funcionario"
+      cargo: "funcionário"
       email: "email"
       username: "username"
   produto_:
@@ -426,6 +476,18 @@ definitions:
       estado: "Criada"
       data_cria: "2000-01-23"
       id_encomenda: 0
+  atualizarEncomenda_:
+    type: "object"
+    required:
+    - "estado"
+    properties:
+      estado:
+        type: "string"
+        enum:
+        - "Criada"
+        - "Enviada"
+        - "Cancelada"
+        - "Entregue"
   ApiResponse:
     type: "object"
     properties:

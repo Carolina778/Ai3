@@ -1,0 +1,16 @@
+.bg-login-image{
+  background-image: url('./img/Encomendas.png');
+  height: 550px;
+  background-position: center ;
+  background-size: contain ;
+  background-repeat: no-repeat;
+}
+
+.LogOut{
+  text-align: right;
+}
+
+.section{
+  margin-top: 30px;
+}
+

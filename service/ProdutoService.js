@@ -8,10 +8,10 @@ const Produto = require('../models/produto')
  * produto_ Produto_ Produto a ser adicionado à loja
  * no response value expected for this operation
  **/
-exports.adicionarProduto = function(produto_) {
-  return new Promise(function(resolve, reject) {
+exports.adicionarProduto = function (produto_) {
+  return new Promise(function (resolve, reject) {
     const produtoExistente = Produto.find({
-      nome : produto_.nome,
+      nome: produto_.nome,
     })
     produtoExistente
       .exec()
@@ -33,7 +33,7 @@ exports.adicionarProduto = function(produto_) {
             })
             .catch(err => {
               reject(400);
-              
+
             });
         }
         else {
@@ -54,17 +54,17 @@ exports.adicionarProduto = function(produto_) {
  * id_produto Integer ID do produto a ser apagado
  * no response value expected for this operation
  **/
-exports.apagarProdutoId = function(id_produto) {
-  return new Promise(function(resolve, reject) {
-      Produto.remove({ _id: id_produto })
-        .exec()
-        .then(res => {
-          resolve(200);
-        })
-        .catch(err => {
-          reject(404);
-        })
-    });
+exports.apagarProdutoId = function (id_produto) {
+  return new Promise(function (resolve, reject) {
+    Produto.remove({ _id: id_produto })
+      .exec()
+      .then(res => {
+        resolve(200);
+      })
+      .catch(err => {
+        reject(404);
+      })
+  });
 }
 
 
@@ -75,12 +75,28 @@ exports.apagarProdutoId = function(id_produto) {
  * produto_ Produto_ Objeto produto a ser atualizado
  * no response value expected for this operation
  **/
-exports.atualizarProduto = function(produto_) {
-  return new Promise(function(resolve, reject) {
-    resolve();
-  });
+exports.atualizarProduto = function (id_produto, produto_) {
+  return new Promise(function (resolve, reject) {
+    const produtoExistente = {
+            nome: produto_.nome,
+            tipo: produto_.tipo,
+            preço: produto_.preço,
+            descrição: produto_.descrição,
+            disp: produto_.disp, 
+            stock: produto_.stock
+  }
+    Produto.updateOne({ _id: id_produto}, {$set:produtoExistente})
+    .exec()
+    .then(result=>{
+      console.log("Sucesso! Produto atualizado!");
+      resolve(result)
+  })
+  .catch(err=>{
+    console.log("Erro!");
+    reject(err)
+})
+});
 }
-
 
 /**
  * Mostrar todos os produtos
@@ -88,9 +104,9 @@ exports.atualizarProduto = function(produto_) {
  *
  * returns List
  **/
-exports.mostrarProduto = function() {
-  return new Promise(function(resolve, reject) {
-      Produto.find()
+exports.mostrarProduto = function () {
+  return new Promise(function (resolve, reject) {
+    Produto.find()
       .exec()
       .then(result => {
         if (result.length > 0)

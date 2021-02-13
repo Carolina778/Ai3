@@ -30,6 +30,7 @@
   };
 
 //moongoose connection-------------------------
+const auth = require('./controllers/auth')
 
 const Session = require('express-session'),
   mongoose = require('mongoose'),
@@ -82,6 +83,9 @@ var swaggerTools = require('swagger-tools');
 var jsyaml = require('js-yaml');
 var serverPort = 4000;
 
+var cache = require('cache-control');
+
+
 // swaggerRouter configuration
 var options = {
   swaggerUi: path.join(__dirname, '/swagger.json'),
@@ -96,12 +100,23 @@ var swaggerDoc = jsyaml.safeLoad(spec);
 // Initialize the Swagger middleware
 swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
 
+  //CORS
+  app.use(cors(corsOpts));
   // Interpret Swagger resources and attach metadata to request - must be first in swagger-tools middleware chain
   app.use(middleware.swaggerMetadata());
+
+  //SESSION
+  app.use(Session(sess));
+
+   // Provide the security handlers
+   app.use(middleware.swaggerSecurity({
+    APIKey: auth.AuthVerification
+  }));
 
   // Validate Swagger requests
   app.use(middleware.swaggerValidator());
 
+  //???
   // Route validated requests to appropriate controller
   app.use(middleware.swaggerRouter(options));
 

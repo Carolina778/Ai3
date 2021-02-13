@@ -12,14 +12,21 @@ const UtilizadorSchema = new mongoose.Schema({
     password:{
         type: String
     },
-    username:{
+    username:{ 
         type: String
     },
     datanasc:{
         type: String
+    },
+    cargo:{
+        type: String,
+        enum:[
+            "funcionário",
+            "administrador"
+        ]
     }
-    // AQUI COLOCAMOS TIPO DE FUNCIONÁRIO??
-        
-});
+},
+{versionKey: false}
+);
 
 module.exports = mongoose.model('Utilizador', UtilizadorSchema);

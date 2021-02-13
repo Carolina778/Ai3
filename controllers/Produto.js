@@ -26,13 +26,14 @@ module.exports.apagarProdutoId = function apagarProdutoId (req, res, next) {
 };
 
 module.exports.atualizarProduto = function atualizarProduto (req, res, next) {
+  var id_produto = req.swagger.params['id_produto'].value;
   var produto_ = req.swagger.params['produto_'].value;
-  Produto.atualizarProduto(produto_)
+  Produto.atualizarProduto(id_produto,produto_)
     .then(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, "Atualizado", response);
     })
     .catch(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res,"Produto inexistente", response);
     });
 };
 
