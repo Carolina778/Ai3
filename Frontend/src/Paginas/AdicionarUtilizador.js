@@ -104,7 +104,7 @@ class AdicionarUtilizador extends React.Component {
 
 
     AddUtilizador() {
-        if (this.state.funcionario === "") {
+       /*  if (this.state.funcionario === "") {
             alert("Insira o nome!");
           } else if (this.state.email === "") {
             alert("Insira o email!");
@@ -117,7 +117,7 @@ class AdicionarUtilizador extends React.Component {
           } else if (this.state.cargo === "") {
             alert("Insira o cargo!");
           } 
-          else {
+          else { */
         axios({
             method: 'post',
             url: '/gestorencomendas-api/utilizador',
@@ -137,14 +137,16 @@ class AdicionarUtilizador extends React.Component {
                     'Utilizador adicionado com sucesso!',
                     'success'
                   );
+                  window.location.href = "../utilizadores";
             })
             .catch(function (error) {
                 console.log("err", error);
-                Swal.fire(
+                alert("Oh no! " + error);
+/*                 Swal.fire(
                     'Erro!',
                     'Utilizador não foi adicionado!',
                     'error'
-                  );
+                  ); */
 
             })
             .then(function () {
@@ -152,6 +154,6 @@ class AdicionarUtilizador extends React.Component {
             })
         }
     }
-}
 
 export default AdicionarUtilizador;
+

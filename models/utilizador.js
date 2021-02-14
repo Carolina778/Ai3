@@ -7,19 +7,25 @@ const UtilizadorSchema = new mongoose.Schema({
         required: true
     },
     email:{
-        type: String
+        type: String,
+        required: true,
     }, 
     password:{
-        type: String
+        type: String,
+        required: true
     },
     username:{ 
-        type: String
+        type: String,
+        required: true,
+
     },
     datanasc:{
-        type: String
+        type: String,
+        required: true,
     },
     cargo:{
         type: String,
+        required: true,
         enum:[
             "funcionário",
             "administrador"

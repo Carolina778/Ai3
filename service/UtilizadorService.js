@@ -197,7 +197,7 @@ exports.registarUtilizador = function (utilizador_) {
               });
           });
         } else {
-          reject(406);
+          reject(206);
         }
       })
       .catch(err => {
