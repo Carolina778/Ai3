@@ -1,6 +1,8 @@
 'use strict';
 const bcrypt = require('bcrypt');
 const Utilizador = require('../models/utilizador');
+const jwt = require('jsonwebtoken');
+
 /**
  * Apagar utilizador
  * Apagar um utilizador
@@ -95,6 +97,7 @@ exports.loginUtilizador = function(login_) {
       .then(utilizadorExistente => {
         if (utilizadorExistente.length < 1) {
           reject(401);
+          console.log("não existe utilizador! Mudar erro para 404 - Utilizador not found");
         }
         else {
           bcrypt.compare(login_.password, utilizadorExistente[0].password, function (err, result) {
@@ -116,12 +119,13 @@ exports.loginUtilizador = function(login_) {
             }
             else {
               reject(401);
+              console.log("Credenciais erradas! Mudar erro para 403 - password errada");
             }
           });
         }
       })
       .catch(err => {
-        reject(401);
+        reject(401); //Este código devia ser 400(?)
       })
   });
 }

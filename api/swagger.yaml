@@ -400,7 +400,7 @@ paths:
       x-swagger-router-controller: "Encomenda"
 definitions:
   login_:
-    type: "string"
+    type: "object"
     properties:
       username:
         type: "string"
